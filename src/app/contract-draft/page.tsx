@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { saveAs } from 'file-saver';
-import { Document, Packer, Paragraph, TextRun } from 'docx';
+import { Document, Packer, Paragraph, TextRun, HeadingLevel } from 'docx';
 import { jsPDF } from 'jspdf';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,12 +16,12 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { Bold, Copy, Download, Italic, List, ListOrdered } from 'lucide-react';
+import { Bold, Copy, Download, Italic, List } from 'lucide-react';
 
 const ContractDraftPage: React.FC = () => {
   const searchParams = useSearchParams();
   const contractDraft = searchParams.get('contract') || '';
-  const [downloadFormat, setDownloadFormat] = useState<'docx' | 'pdf'>('docx');
+  const [downloadFormat, setDownloadFormat<'docx' | 'pdf'>('docx');
   const editor = useEditor({
     extensions: [StarterKit],
     content: contractDraft,
@@ -66,8 +66,39 @@ const ContractDraftPage: React.FC = () => {
       let fileName: string;
 
       if (downloadFormat === 'pdf') {
-        const pdf = new jsPDF();
-        pdf.text(contractDraft, 10, 10); // Basic text rendering. Consider using more advanced features for better formatting.
+        const pdf = new jsPDF({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: 'a4',
+        });
+
+        // Set document margins
+        const margin = 10;
+
+        // Set font size and line height
+        const fontSize = 12;
+        pdf.setFontSize(fontSize);
+        const lineHeight = 7;
+
+        // Calculate the available width for the text
+        const availableWidth = pdf.internal.pageSize.getWidth() - 2 * margin;
+
+        // Split the text into lines that fit within the available width
+        const textLines = pdf.splitTextToSize(text, availableWidth);
+
+        // Calculate the starting Y position for the text
+        let y = margin;
+
+        // Add each line of text to the PDF
+        textLines.forEach(line => {
+          if (y > pdf.internal.pageSize.getHeight() - margin) {
+            pdf.addPage();
+            y = margin;
+          }
+          pdf.text(line, margin, y);
+          y += lineHeight;
+        });
+
         blob = pdf.output('blob');
         fileName = 'contract.pdf';
       } else {
@@ -121,9 +152,6 @@ const ContractDraftPage: React.FC = () => {
             <Button onClick={() => editor.chain().focus().toggleBulletList().run()}>
              <List className='h-4 w-4'/>
 
-            </Button>
-            <Button onClick={() => editor.chain().focus().toggleOrderedList().run()}>
-              <ListOrdered />
             </Button>
           </div>
         )}
