@@ -44,7 +44,7 @@ Follow these steps to get a local copy up and running.
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/vasukushwah/ContractPilot.git](https://github.com/vasukushwah/ContractPilot.git)
+    git clone https://github.com/vasukushwah/ContractPilot.git
     cd ContractPilot
     ```
 
