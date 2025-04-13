@@ -59,6 +59,8 @@ const ContractDraftPage: React.FC = () => {
       });
       setSuggestionsError('Failed to fetch AI suggestions. Please try again.');
       setErrorMessage('Failed to generate suggestions. Please try again.');
+    } finally {
+      setIsGettingSuggestions(false);
     }
   }, [contractDraft, toast]);
 
@@ -151,8 +153,8 @@ const ContractDraftPage: React.FC = () => {
           sections: [{
             properties: {},
             children: [
-              new LazyDocx.Document({ text: 'Contract Draft', heading: HeadingLevel.HEADING_1 }),
-                new LazyDocx.Paragraph({
+              new Paragraph({ text: 'Contract Draft', heading: HeadingLevel.HEADING_1 }),
+                new Paragraph({
                   children: [new TextRun(text)],
                 }),
               
