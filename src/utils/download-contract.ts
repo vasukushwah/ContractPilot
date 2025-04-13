@@ -4,7 +4,7 @@ import { Document, Packer, Paragraph, TextRun, HeadingLevel } from "docx";
 import { saveAs } from 'file-saver';
 import { jsPDF } from "jspdf";
 import { toast } from "@/hooks/use-toast"; // Assuming useToast is in this path
-import autoTable from 'jspdf-autotable';
+// import autoTable from 'jspdf-autotable';
 
 
 type FormatType = "docx" | "pdf";
@@ -46,14 +46,15 @@ export const handleDownloadContract = async (contractDraft: string, downloadForm
       };
 
       // Use autoTable for structured formatting
-      autoTable(pdf, {
-        body: [[contractDraft]],
-        margin: { top: 10, left: 10, right: 10, bottom: 10 },
-        styles: {
-          overflow: 'linebreak',
-          fontSize: 10,
-        },
-      });
+      // autoTable(pdf, {
+      //   body: [[contractDraft]],
+      //   margin: { top: 10, left: 10, right: 10, bottom: 10 },
+      //   styles: {
+      //     overflow: 'linebreak',
+      //     fontSize: 10,
+      //   },
+      // });
+      pdf.text(contractDraft, 10, 10, textOptions);
       pdf.save("contract.pdf");
     }
     toast({
