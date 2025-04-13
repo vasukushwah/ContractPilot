@@ -42,7 +42,7 @@ export default function Home() {
           </div>
           {/* Hero Image */}
           <div className="md:max-w-md mx-auto">
-            <Image src={heroImageUrl} alt="ContractCrafter Hero Visual" width={1000} height={500} className="w-full h-auto object-cover rounded-xl shadow-2xl" />
+            <Image src={heroImageUrl} alt="ContractCrafter Hero Visual" width={1000} height={500} className="w-full h-auto object-cover rounded-xl shadow-2xl" priority />
           </div>
         </div>
       </section>

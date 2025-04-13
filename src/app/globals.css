@@ -2,12 +2,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@layer base {
- * {
-   font-family: var(--font-bellefair);
- }
-}
-
 
 @layer base {
   :root {

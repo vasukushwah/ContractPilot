@@ -8,9 +8,6 @@ export default {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-		fontFamily: {
-			bellefair: ["var(--font-bellefair)", "sans-serif"],
-		},
 		extend: {
 		fontFamily: {
 		},	

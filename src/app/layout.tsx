@@ -1,16 +1,20 @@
 import type { Metadata } from "next";
-import { Bellefair } from 'next/font/google';
+import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import ReduxProvider from '@/components/ReduxProvider';
 import store from '@/store';
 
 
-const bellefair = Bellefair({
-    weight: ['400'],
-    subsets: ["latin"],
+const geistSans = Geist({
+    variable: '--font-geist-sans', 
+    subsets: ['latin'],
   });
-
+  
+  const geistMono = Geist_Mono({
+    variable: '--font-geist-mono',
+    subsets: ['latin'],
+  });
 
 export const metadata: Metadata = {
     title: "ContractPilot - Streamline Your Contracts",
@@ -39,8 +43,7 @@ export default function RootLayout({
                 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
                 <link rel="manifest" href="/site.webmanifest" />
             </head>
-            <body className={`${bellefair.className} antialiased`} suppressHydrationWarning={true} >
-        <ReduxProvider>
+            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning={true}>        <ReduxProvider>
           {children}
           <Toaster />
         </ReduxProvider>
