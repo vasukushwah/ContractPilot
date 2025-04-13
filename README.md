@@ -1,14 +1,14 @@
-# ContractWingman 🚀
+# ContractPilot 🚀
 
-ContractWingman is an innovative web application designed to streamline the creation of legal contracts. Leveraging the power of AI and a user-friendly interface, ContractWingman makes contract generation accessible and efficient for everyone.
+ContractPilot is an innovative web application designed to streamline the creation of legal contracts. Leveraging the power of AI and a user-friendly interface, ContractPilot makes contract generation accessible and efficient for everyone.
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 ## Description
 
-Simplify your contract workflow with ContractWingman. This tool utilizes AI to help draft contracts tailored to specific needs, offers intelligent suggestions for improvements, and allows easy exporting, all within a clean, modern interface.
+Simplify your contract workflow with ContractPilot. This tool utilizes AI to help draft contracts tailored to specific needs, offers intelligent suggestions for improvements, and allows easy exporting, all within a clean, modern interface.
 
 ## Key Features ✨
 
-* **AI-Powered Contract Generation**: Input your requirements and let AI assist in drafting the initial contract.
+*   **AI-Powered Contract Generation**: Input your requirements and let AI assist in drafting the initial contract.
 * **Rich Text Editor**: Edit and format your contracts using an intuitive WYSIWYG editor powered by Tiptap.
 * **AI-Driven Suggestions**: Receive intelligent suggestions powered by AI (`suggestImprovements`) to refine clauses and wording for clarity and completeness.
 * **Multiple Download Formats**: Download your finalized contracts as DOCX or PDF files.
@@ -44,8 +44,8 @@ Follow these steps to get a local copy up and running.
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/vasukushwah/contractwingman.git](https://github.com/vasukushwah/contractwingman.git)
-    cd contractwingman
+    git clone [https://github.com/vasukushwah/ContractPilot.git](https://github.com/vasukushwah/ContractPilot.git)
+    cd ContractPilot
     ```
 
 2.  **Install dependencies:**
@@ -88,7 +88,7 @@ Follow these steps to get a local copy up and running.
 
 ## Folder Structure (Example)
 ```
-contractwingman/
+ContractPilot/
 ├── public/               # Static assets
 ├── src/
 │   ├── app/              # Next.js App Router pages
@@ -126,7 +126,7 @@ Distributed under the MIT License. See `LICENSE` file for more information. (Not
 
 Vasu Kushwah - vasukushwa01@gmail.com
 
-Project Link: [https://github.com/vasukushwah/contractwingman](https://github.com/vasukushwah/contractwingman)
+Project Link: [https://github.com/vasukushwah/ContractPilot](https://github.com/vasukushwah/ContractPilot)
 
 ---
 

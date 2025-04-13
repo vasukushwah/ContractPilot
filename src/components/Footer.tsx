@@ -2,9 +2,9 @@ import React from 'react';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-secondary py-4 mt-8">
+    <footer className="bg-[#1C1C1C] py-4 mt-8">
       <div className="container mx-auto text-center text-sm text-gray-500">
-        <p>© 2023 ContractWingman. All rights reserved.</p>
+        <p>© 2023 ContractPilot. All rights reserved.</p>
         <ul className="mt-2">
           <li className="inline-block mx-2">
             <a href="/terms-of-service" className="hover:underline">

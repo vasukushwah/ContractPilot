@@ -31,7 +31,7 @@ const ContractGeneratorForm: React.FC<ContractGeneratorFormProps> = ({ onSubmit,
   }, [setValue]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6 max-w-2xl">
+    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6">
       <div className="grid gap-2">
         <Label htmlFor="freelancerDetails">Freelancer Details</Label>
         <Input

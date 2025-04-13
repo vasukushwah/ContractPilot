@@ -8,7 +8,7 @@ const PrivacyPolicy: React.FC = () => {
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Introduction</h2>
         <p>
-          Welcome to ContractWingman. We are committed to protecting your
+          Welcome to ContractPilot. We are committed to protecting your
           privacy and handling your data responsibly. This Privacy Policy
           explains how we collect, use, disclose, and protect your
           information when you use our services.
@@ -99,7 +99,7 @@ const PrivacyPolicy: React.FC = () => {
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
         <p>
-          If you have any questions about this Privacy Policy, please contact us at info@contractwingman.com.
+          If you have any questions about this Privacy Policy, please contact us at info@ContractPilot.com.
         </p>
       </section>
     </div>
