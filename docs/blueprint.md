@@ -10,7 +10,7 @@
 
 ## Style Guidelines:
 
-- Primary color: Teal (#008080) to convey professionalism and trust.
+- Primary color: Teal (#009B7D) to convey professionalism and trust.
 - Secondary color: Light gray (#F0F0F0) for backgrounds and subtle accents.
 - Accent: Gold (#FFD700) for highlighting important elements and CTAs.
 - Clean and professional typography for readability and a serious tone.

@@ -23,14 +23,14 @@ export default function Home() {
   const howItWorksImageUrl = "/how-its-works.jpeg";
 
   return (
-    <div className="bg-[#121212] min-h-screen flex flex-col font-sans text-white">
+    <div className="bg-white min-h-screen flex flex-col font-sans text-gray-900">
       <Header /> {/* Header Component */}
       {/* Hero Section */}
       <section className="py-20 px-6 md:px-24 ">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="text-center md:text-left flex flex-col justify-center">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-[#E6A8FF] to-[#9F7AEA]">Streamline Contracts With AI</h1>
-            <p className="text-lg md:text-xl mb-10 text-gray-400 max-w-md md:max-w-xl">Simplify your contract creation process with our intuitive, AI-powered tool.</p>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-[#009B7D] to-[#009B7D]">Streamline Contracts With AI</h1>
+            <p className="text-lg md:text-xl mb-10 text-gray-600 max-w-md md:max-w-xl">Simplify your contract creation process with our intuitive, AI-powered tool.</p>
              {/* Call to Action Button */}
             <Button
               onClick={() => router.push("/contract-generator")}
@@ -48,56 +48,56 @@ export default function Home() {
       </section>
       {/* Problem/Solution Section */}
       <section className="py-20 px-6 md:px-24 ">
-        <div className="max-w-5xl mx-auto text-center bg-[#1C1C1C] rounded-[30px] py-16 px-8 ">
-          <h2 className="text-4xl font-bold mb-16 bg-clip-text text-transparent bg-gradient-to-r from-[#E6A8FF] to-[#9F7AEA]">
+        <div className="max-w-5xl mx-auto text-center bg-gray-100 rounded-[30px] py-16 px-8 ">
+          <h2 className="text-4xl font-bold mb-16 bg-clip-text text-transparent bg-gradient-to-r from-[#009B7D] to-[#009B7D]">
             AI-Powered Contract Solutions
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             {/* Problem Column */}
-            <div className="text-left p-6 bg-[#323232] rounded-[20px]">
+            <div className="text-left p-6 bg-gray-200 rounded-[20px]">
               <h3 className="text-2xl font-semibold mb-4">The Challenge</h3>
-              <p className="text-gray-400 leading-relaxed">Manual contract creation is slow, error-prone, and costly. Legal complexities can hinder business agility.</p>
+              <p className="text-gray-600 leading-relaxed">Manual contract creation is slow, error-prone, and costly. Legal complexities can hinder business agility.</p>
             </div>
             {/* Solution Column */}
-            <div className="text-left p-6 bg-[#323232] rounded-[20px]">
+            <div className="text-left p-6 bg-gray-200 rounded-[20px]">
               <h3 className="text-2xl font-semibold mb-4">Our AI Solution</h3>
-              <p className="text-gray-400 leading-relaxed">Our AI streamlines the process, generating accurate, compliant, and professional contracts quickly.</p>
+              <p className="text-gray-600 leading-relaxed">Our AI streamlines the process, generating accurate, compliant, and professional contracts quickly.</p>
             </div>
           </div>
         </div>
       </section>
       {/* How It Works Section */}
       <section className="py-20 px-6 md:px-24">
-        <div className="max-w-6xl mx-auto text-center bg-[#1C1C1C] rounded-[30px] py-16 px-8">
-          <h2 className="text-4xl font-bold mb-12 bg-clip-text text-transparent bg-gradient-to-r from-[#E6A8FF] to-[#9F7AEA]">How Our AI Contract Generator Works</h2>
+        <div className="max-w-6xl mx-auto text-center bg-gray-100 rounded-[30px] py-16 px-8">
+          <h2 className="text-4xl font-bold mb-12 bg-clip-text text-transparent bg-gradient-to-r from-[#009B7D] to-[#009B7D]">How Our AI Contract Generator Works</h2>
           <Image src={howItWorksImageUrl} alt="How ContractCrafter Works Diagram" width={1000} height={400} className="mx-auto rounded-lg shadow-lg mb-8" />
         </div>
       </section>
       {/* Features Section */}
       <section className="py-20 px-6 md:px-24">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold mb-16 text-center bg-clip-text text-transparent bg-gradient-to-r from-[#E6A8FF] to-[#9F7AEA]">Key Features of AI Contract Generation</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <h2 className="text-4xl font-bold mb-16 text-center bg-clip-text text-transparent bg-gradient-to-r from-[#3B82F6] to-[#0EA5E9]">Key Features of AI Contract Generation</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 ">
             {/* Feature Card 1 */}
-            <div className="bg-[#1C1C1C] p-8 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center">
-              <div className="bg-[#323232] p-4 rounded-full mb-5">
-                <Timer className="w-12 h-12 text-[#E6A8FF]" />
+            <div className="bg-gray-100 p-8 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center">
+              <div className="bg-gray-200 dark:bg-gray-700 p-4 rounded-full mb-5">
+                <Timer className="w-12 h-12 text-[#009B7D]" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Time-Saving AI</h3>
-              <p className="text-gray-400 leading-relaxed">Generate contracts in minutes, not hours, freeing up valuable time.</p>
+              <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">Time-Saving AI</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">Generate contracts in minutes, not hours, freeing up valuable time.</p>
             </div>
             {/* Feature Card 2 */}
-            <div className="bg-[#1C1C1C] p-8 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center">
-              <div className="bg-[#323232] p-4 rounded-full mb-5">
-                <FileText className="w-12 h-12 text-[#E6A8FF]" />
+            <div className="bg-gray-100 dark:bg-[#1C1C1C] p-8 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center">
+              <div className="bg-gray-200 dark:bg-gray-700 p-4 rounded-full mb-5 ">
+                <FileText className="w-12 h-12 text-[#009B7D] " />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Customizable Contracts</h3>
-              <p className="text-gray-400 leading-relaxed">Tailor contracts to your specific needs with our easy-to-use tools.</p>
+              <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">Customizable Contracts</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">Tailor contracts to your specific needs with our easy-to-use tools.</p>
             </div>
             {/* Feature Card 3 */}
-            <div className="bg-[#1C1C1C] p-8 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center">
-              <div className="bg-[#323232] p-4 rounded-full mb-5">
-                <ShieldCheck className="w-12 h-12 text-[#E6A8FF]" />
+            <div className="bg-gray-100 dark:bg-[#1C1C1C] p-8 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center">
+              <div className="bg-gray-200 dark:bg-gray-700 p-4 rounded-full mb-5 ">
+                <ShieldCheck className="w-12 h-12 text-[#009B7D]" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Compliance Assurance</h3>
               <p className="text-gray-400 leading-relaxed">Built-in legal standards reduce compliance risks.</p>
@@ -106,9 +106,9 @@ export default function Home() {
         </div>
       </section>
       {/* Final Call to Action Section */}
-      <section className="py-20 px-6 md:px-24 bg-[#1C1C1C] rounded-[30px]">
-        <div className="max-w-6xl mx-auto bg-clip-text text-transparent bg-gradient-to-r from-[#E6A8FF] to-[#9F7AEA]">
-          <h2 className="text-4xl font-bold mb-16 text-center">Ready to transform your contract process?</h2>
+      <section className="py-20 px-6 md:px-24 bg-gray-100 rounded-[30px]">
+        <div className="max-w-6xl mx-auto bg-clip-text text-transparent bg-gradient-to-r from-[#009B7D] to-[#009B7D]">
+          <h2 className="text-4xl font-bold mb-16 text-center ">Ready to transform your contract process?</h2>
           <Image src={"/supercharge.png"} alt="Supercharge Your Contracts with AI" width={1000} height={400} className="mx-auto rounded-lg shadow-lg mb-8" />
         </div>
       </section>
