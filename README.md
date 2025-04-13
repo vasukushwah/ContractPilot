@@ -87,6 +87,7 @@ Follow these steps to get a local copy up and running.
 8.  Select your desired download format (DOCX or PDF) and click "Download".
 
 ## Folder Structure (Example)
+```
 contractwingman/
 ├── public/               # Static assets
 ├── src/
@@ -103,7 +104,7 @@ contractwingman/
 ├── tsconfig.json         # TypeScript configuration
 ├── package.json          # Project dependencies and scripts
 └── README.md             # This file
-
+```
 
 ## Contributing 🤝
 
