@@ -1,261 +1,192 @@
-'use client';
+"use client";
 
-import React, { useState, useCallback, lazy, Suspense } from 'react';
+import React, { useState, useCallback, lazy, Suspense, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { saveAs } from 'file-saver';
 import { useSelector } from 'react-redux';
-import { Loader2, Bold, Copy, Download, Italic, List, ListOrdered, Lightbulb, Check } from 'lucide-react';
+import { EditorDisplay} from './EditorDisplay';
 
+// AI suggestions (assuming this is the correct path)
 import { suggestImprovements } from '@/ai/flows/suggest-improvements';
-import {RootState} from '@/store';
-import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+// Redux state (assuming this is the correct path)
+import { RootState } from '@/store';
+// Shadcn UI components (assuming these paths are correct)
+// Custom hook (assuming this path is correct)
 import { useToast } from '@/hooks/use-toast';
-import { EditorContent, useEditor } from '@tiptap/react';
+// Tiptap editor
+import { Editor, EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-const LazyDocx = lazy(() => import('docx'));
-const LazyJsPDF = lazy(() => import('jspdf'));
-const LazyAiSuggestions = lazy(() => import('./AISuggestions'));
-interface LazyComponents {
-  Document: any;
-  Packer: any;
-}
+
+import { Loader2 } from 'lucide-react';
+import ContractPageHeader from './ContractPageHeader';
+import EditorToolbar from './EditorToolbar';
+import SuggestionsDisplay from './SuggestionsDisplay';
+import { ActionButtons } from './ActionButtons';
+
+
 const ContractDraftPage: React.FC = () => {
   const router = useRouter();
   const contractData = useSelector((state: RootState) => state.contract);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [downloadError, setDownloadError] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [suggestionsError, setSuggestionsError] = useState<string | null>(null);
-  const [isGettingSuggestions, setIsGettingSuggestions] = useState(false);
+  const { contractDraft } = contractData;
 
-  
-  const {contractDraft} = contractData
+  // State variables remain in the parent
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+
+  useEffect(() => {
+      if (!contractDraft) {
+          router.push('/contract-generator');
+      }
+  }, [contractDraft, router]);
+
+    const onApplySuggestion = useCallback((suggestion: string) => {
+    setSuggestions((prevSuggestions) =>
+      prevSuggestions.filter((s) => s !== suggestion)
+    );
+  }, []);
+
+
+
+    // State variables remain in the parent
   const [downloadFormat, setDownloadFormat] = useState<'docx' | 'pdf'>('docx');
-  const [lazyComponents, setLazyComponents] = useState<LazyComponents | null>(null);
-  const {toast} = useToast();
+  const [isGettingSuggestions, setIsGettingSuggestions] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [suggestionsError, setSuggestionsError] = useState<boolean>(false); // Track if suggestion loading failed
+  const { toast } = useToast();
+
+  // Initialize Tiptap editor
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: contractDraft || '<p>Start writing your contract...</p>',
+    editable: true,
+  });
+
+  // Effect to update editor content if contractDraft changes from Redux
+  useEffect(() => {
+    if (editor && contractDraft && editor.getHTML() !== contractDraft) {
+      editor.commands.setContent(contractDraft, false);
+    }
+  }, [contractDraft, editor]);
+
+
 
   const handleGetSuggestions = useCallback(async () => {
-    if (!contractDraft) return;
+    const currentContent = editor?.getText();
+    if (!currentContent?.trim()) {
+       toast({ title: 'Empty Content', description: 'Cannot generate suggestions for an empty contract.', variant: 'destructive' });
+       return;
+    }
     setIsGettingSuggestions(true);
+    setErrorMessage(null);
+    setSuggestionsError(false); // Reset suggestion error state
+    setSuggestions([]); // Clear previous suggestions
     try {
-      const improvements = await suggestImprovements({ contractText: contractDraft });
+      const improvements = await suggestImprovements({ contractText: currentContent });
       setSuggestions(improvements.suggestions);
-      toast({
-        title: 'AI Suggestions generated successfully!',
-      });
+      toast({ title: 'AI Suggestions Generated!', description: 'Suggestions have been successfully generated.' });
     } catch (error) {
       console.error('Error getting suggestions:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to generate suggestions. Please try again.',
-        variant: 'destructive',
-      });
-      setSuggestionsError('Failed to fetch AI suggestions. Please try again.');
-      setErrorMessage('Failed to generate suggestions. Please try again.');
+      const errorMsg = 'Failed to generate suggestions. Please try again.';
+      setErrorMessage(errorMsg); // Show general error
+      setSuggestionsError(true); // Set suggestion specific error state
+      toast({ title: 'Error', description: errorMsg, variant: 'destructive' });
     } finally {
       setIsGettingSuggestions(false);
     }
-  }, [contractDraft, toast]);
-
-    const editor = useEditor({
-      extensions: [StarterKit],
-      content: contractDraft,
-      editable: true,
-
-      onUpdate: ({ editor }) => {
-        const html = editor.getHTML();
-        console.log('html : ', html);
-      },
-    }
-  );
-
-
+  }, [editor, toast]);
 
   const handleCopyToClipboard = useCallback(() => {
-    const text = editor?.getText()
+    if (!editor) return;
+    const text = editor.getText();
+    if (!text.trim()) {
+      toast({ title: 'Nothing to copy', description: 'The editor is empty.', variant: 'destructive'});
+      return;
+    }
     navigator.clipboard.writeText(text).then(() => {
-      toast ({
-        title: 'Contract copied',
-        description: 'Contract text copied to clipboard.',
-      });
+      toast ({ title: 'Contract Copied', description: 'Contract text copied to clipboard.' });
     }).catch((error) => {
-      toast({
-        title: 'Copy failed',
-        description: 'Failed to copy contract text.',
-        variant: 'destructive',
-      });
+      console.error('Clipboard copy error:', error);
+      toast({ title: 'Copy Failed', description: 'Could not copy contract text to clipboard.', variant: 'destructive' });
     });
   }, [editor, toast]);
 
   const handleDownloadContract = useCallback(async () => {
-    setIsDownloading(true);
     if (!editor) return;
     const text = editor.getText();
-
-    let Document, Packer, TextRun, HeadingLevel;
+    if (!text.trim()) {
+      toast({ title: 'Cannot Download Empty Contract', description: 'Please add content to the contract before downloading.', variant: 'destructive'});
+      return;
+    }
+    setIsDownloading(true);
+    setErrorMessage(null);
     try {
       let blob: Blob | undefined;
       let fileName: string;
-
-
-      if (downloadFormat === 'pdf') {        
-        const pdf = new LazyJsPDF({          
-          orientation: 'portrait',
-          unit: 'mm',
-          format: 'a4',
-        });
-        
-        // Set document margins
-        const margin = 10;
-
-        // Set font size and line height
-        const fontSize = 12;
+      if (downloadFormat === 'pdf') {
+        const { default: jsPDF } = await import('jspdf');
+        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        const margin = 15, fontSize = 11, lineHeight = 6;
         pdf.setFontSize(fontSize);
-        const lineHeight = 7;
-
-        // Calculate the available width for the text
         const availableWidth = pdf.internal.pageSize.getWidth() - 2 * margin;
-
-        // Split the text into lines that fit within the available width
         const textLines = pdf.splitTextToSize(text, availableWidth);
-
-        // Calculate the starting Y position for the text
         let y = margin;
-
-        // Add each line of text to the PDF
         textLines.forEach((line: string) => {
-          if (y > pdf.internal.pageSize.getHeight() - margin) {
-            pdf.addPage();
-            y = margin;
-          }
-          pdf.text(line, margin, y);
-          y += lineHeight;
+          if (y > pdf.internal.pageSize.getHeight() - margin) { pdf.addPage(); y = margin; }
+          pdf.text(line, margin, y); y += lineHeight;
         });
-
         blob = pdf.output('blob');
         fileName = 'contract.pdf';
       } else {
-       
-        ({ Document, Packer, TextRun, HeadingLevel } = await import('docx').then((module) => ({
-          Document: module.Document,
-          Packer: module.Packer,
-          TextRun: module.TextRun,
-          HeadingLevel: module.HeadingLevel
-        })));
-        const doc = new Document({
-          sections: [{
-            properties: {},
-            children: [
-              new Paragraph({ text: 'Contract Draft', heading: HeadingLevel.HEADING_1 }),
-                new Paragraph({
-                  children: [new TextRun(text)],
-                }),
-              
-            ],
-          }],
-        });
-
+        const { Document, Packer, TextRun, Paragraph, HeadingLevel } = await import('docx');
+        const paragraphs = text.split('\n').map(line => new Paragraph({ children: [new TextRun(line)], spacing: { after: 100 } }));
+        const doc = new Document({ sections: [{ properties: {}, children: [ new Paragraph({ text: 'Contract Draft', heading: HeadingLevel.HEADING_1, spacing: { after: 200 } }), ...paragraphs ] }] });
         blob = await Packer.toBlob(doc);
         fileName = 'contract.docx';
       }
-
       saveAs(blob, fileName);
-      toast({
-        title: 'Contract downloaded',
-        description: `Contract downloaded successfully as ${fileName}.`,
-      });
+      toast({ title: 'Contract Downloaded', description: `Contract downloaded successfully as ${fileName}.` });
     } catch (error) {
       console.error('Error generating or downloading contract:', error);
-      toast({
-        title: 'Download failed',
-        description: 'Failed to generate or download contract. Please try again.',
-        variant: 'destructive',
-      });
-      setDownloadError('Failed to download the contract. Please try again.');
-      setErrorMessage('Failed to download contract. Please try again.');
+      const errorMsg = 'Failed to download the contract. Please check console for details.';
+      setErrorMessage(errorMsg);
+      toast({ title: 'Download Failed', description: errorMsg, variant: 'destructive' });
     } finally {
       setIsDownloading(false);
     }
-  },[editor, downloadFormat,toast]);
+  },[editor, downloadFormat, toast]);
 
-  const [isDownloading, setIsDownloading] = useState(false);
+
+  if (!editor) {
+    return <div className="container mx-auto p-6 text-center"><Loader2 className="animate-spin h-8 w-8 inline-block" /> Loading Editor...</div>;
+  }
 
   return (
-    <div className="container mx-auto p-6">
-      {/* Title and Back Button */}
-      <header className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold" aria-level={1} role="heading">Contract Draft</h1>
-        <Button variant="secondary" size="sm" onClick={() => router.back()} aria-label="Back to Contract Generator">Back to Generator</Button>
-      </header>
+    <div className="container mx-auto p-6 bg-gray-50 min-h-screen">
+      {/* Render Child Components */}
+      <ContractPageHeader title="Contract Draft" onBack={() => router.back()} />
+      <EditorToolbar editor={editor} onGetSuggestions={handleGetSuggestions} isGettingSuggestions={isGettingSuggestions} />
+      <EditorDisplay editor={editor}/>
+      <ActionButtons
+        onCopy={handleCopyToClipboard}
+        onDownload={handleDownloadContract}
+        isDownloading={isDownloading}
+        downloadFormat={downloadFormat}
+        onFormatChange={setDownloadFormat}
+      />
 
-       {/* Editor Controls */}
-        {editor && (
-          <nav className="mb-6 flex flex-wrap items-center gap-2" aria-label="Editor Formatting Controls">
-            <Button size="sm" onClick={() => editor.chain().focus().toggleBold().run()} aria-label="Bold">
-              <Bold className="h-4 w-4" />
-            </Button>
-            <Button size="sm" onClick={() => editor.chain().focus().toggleItalic().run()} aria-label="Italic">
-              <Italic className="h-4 w-4" />
-            </Button>
-            <Button size="sm" onClick={() => editor.chain().focus().toggleBulletList().run()} aria-label="Unordered List">
-              <List className="h-4 w-4" />
-            </Button>
-            <Button size="sm" onClick={() => editor.chain().focus().toggleOrderedList().run()} aria-label="Ordered List">
-              <ListOrdered className="h-4 w-4" />
-            </Button>
-          </nav>
-        )}
-      {/* Get AI Suggestions */}
-      <Button size="sm" onClick={handleGetSuggestions} variant="secondary" className="w-fit mb-6" disabled={isGettingSuggestions} aria-label="Get AI Suggestions">
-        {isGettingSuggestions && <Loader2 className="animate-spin w-4 h-4 mr-2" />}
-        <Lightbulb className="h-4 w-4 mr-2" />
-        Get AI Suggestions
-      </Button>
+      {/* Display General Error Message */}
+      {errorMessage && (
+        <div className="mb-4 p-3 bg-red-100 border border-red-300 text-red-700 rounded-md text-sm">
+          {errorMessage}
+        </div>
+       )}
 
-      {/* Display Suggestions Error */}
-      {suggestionsError && <div className="text-red-500 text-sm mt-2">{suggestionsError}</div>}
-
-      <div className="w-full max-w-210mm min-h-297mm p-4 border border-gray-300 bg-white rounded-lg shadow-md min-h-[500px] mb-8">
-        <EditorContent editor={editor} />
-      </div>
-
-      {/* Action Buttons */}
-      <div className="mb-8 flex flex-wrap gap-4">
-        <Button onClick={handleCopyToClipboard} className='flex gap-2 items-center' aria-label="Copy contract to clipboard">
-          <Copy className='h-4 w-4' /> Copy to Clipboard
-        </Button>
-        <Button onClick={handleDownloadContract} className='flex gap-2 items-center' disabled={isDownloading} aria-label="Download contract">
-          {isDownloading && <Loader2 className="animate-spin w-4 h-4 mr-2" />}
-          <Download className='h-4 w-4' /> Download Contract
-        </Button>
-        <Select value={downloadFormat} onValueChange={setDownloadFormat} aria-label="Select download format">
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select format" />
-          </SelectTrigger>
-          <SelectContent>
-            {/* Display Download Error */}
-            <SelectItem value="docx">DOCX</SelectItem>
-            <SelectItem value="pdf">PDF</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-        
-      {/* AI Suggestions */}
-      <Suspense fallback={<div className="mt-4">Loading...</div>}>
-        {suggestions.length > 0 && (
-          <LazyAiSuggestions suggestions={suggestions} />
-
-        )}
-      </Suspense>
-        {/* Display Error Message */}
-      {errorMessage && <div className="text-red-500 mt-2">{errorMessage}</div>}
+      <SuggestionsDisplay
+        suggestions={suggestions}
+        isGettingSuggestions={isGettingSuggestions}
+        isLoadingError={suggestionsError} // Pass down the suggestion error state
+        onApplySuggestion={onApplySuggestion}
+      />
     </div>
   );
 };
