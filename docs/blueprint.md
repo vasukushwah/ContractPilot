@@ -18,5 +18,5 @@
 - Use simple, recognizable icons for actions and information.
 
 ## Original User Request:
-"ContractCrafter" – AI-Powered Contract Generator For Freelancers using Next.js And Backend Express.Js
+"ContractWingman" – AI-Powered Contract Generator For Freelancers using Next.js And Backend Express.Js
   

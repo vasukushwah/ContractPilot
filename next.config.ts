@@ -1,4 +1,4 @@
-import type {NextConfig} from 'next';
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
+  },
+  images: {
+    domains: ['placehold.co'], // Add other domains as needed
+    formats: ['image/webp'], // Optionally, specify preferred formats
+    
   },
 };
 

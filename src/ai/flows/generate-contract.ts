@@ -41,14 +41,18 @@ const generateContractPrompt = ai.definePrompt({
       governingLaw: z.string().describe('The governing law for the contract.'),
     }),
   },
-  output: {
-    schema: z.object({
-      contractDraft: z.string().describe('The generated contract draft.'),
-    }),
-  },
-  prompt: `You are an expert contract lawyer. Generate a contract based on the following details. Use appropriate legal jargon and format the contract in a professional manner. Be sure to include all necessary clauses and terms to protect both parties. The governing law is {{{governingLaw}}}.
+    output: {
+        schema: z.object({
+            contractDraft: z.string().describe('The generated contract draft, including HTML formatting.'),
+        }),
+    },
+    prompt: `You are an expert contract lawyer. Generate a contract based on the following details. 
+    Use appropriate legal jargon and format the contract in a professional manner. Be sure to include all necessary clauses and terms to protect both parties. 
+    The governing law is {{{governingLaw}}}.
+    Format the contract draft using HTML tags for improved readability. Include paragraph breaks (<p>), headings (<h1>, <h2>, etc.), and lists (<ul>, <ol>, <li>) where appropriate.
+    Use bold (<b>) or italic (<i>) tags to emphasize key terms or clauses.
 
-Freelancer Details: {{{freelancerDetails}}}
+    Freelancer Details: {{{freelancerDetails}}}
 Client Details: {{{clientDetails}}}
 Service Description: {{{serviceDescription}}}
 Payment Terms: {{{paymentTerms}}}`,
